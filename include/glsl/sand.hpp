@@ -11,7 +11,7 @@ uniform mat4 model;
 
 void main()
 {
-	gl_Position = model * vec4(position.x, position.y, position.z, 1.0);
+    gl_Position = model * vec4(position.x, position.y, position.z, 1.0);
 }
 )" };
 
@@ -22,7 +22,7 @@ out vec4 fragment_color;
 
 void main()
 {
-	fragment_color = vec4(1.0f, 0.5f, 0.2f, 1.0f);
+    fragment_color = vec4(1.0f, 0.5f, 0.2f, 1.0f);
 }
 )" };
 
