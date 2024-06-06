@@ -1,9 +1,7 @@
 #ifndef SAND_HPP
 #define SAND_HPP
 
-#include <string>
-
-const std::string sand_vert { R"(
+constexpr const char *sand_vert { R"(
 #version 330 core
 layout (location = 0) in vec3 position;
 
@@ -15,7 +13,7 @@ void main()
 }
 )" };
 
-const std::string sand_frag { R"(
+constexpr const char *sand_frag { R"(
 #version 330 core
 
 out vec4 fragment_color;
