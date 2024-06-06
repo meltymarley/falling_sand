@@ -1,4 +1,3 @@
-#include <span>
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
@@ -9,24 +8,22 @@
 #include <iostream>
 #include <unordered_map>
 #include <array>
+#include <span>
 
 #include "debug.hpp"
 
 #include "glsl/sand.hpp"
 
 // Reads vertex & fragment shaders, builds shader program, then returns its ID.
-auto buildShaderProgram(const std::string &vertex, const std::string &fragment)
+auto buildShaderProgram(const char *const vertex, const char *const fragment)
     -> unsigned
 {
-    const char *vertex_code { vertex.c_str() };
-    const char *fragment_code { fragment.c_str() };
-
     unsigned vertex_shader { glCreateShader(GL_VERTEX_SHADER) };
-    glShaderSource(vertex_shader, 1, &vertex_code, nullptr);
+    glShaderSource(vertex_shader, 1, &vertex, nullptr);
     glCompileShader(vertex_shader);
 
     unsigned fragment_shader { glCreateShader(GL_FRAGMENT_SHADER) };
-    glShaderSource(fragment_shader, 1, &fragment_code, nullptr);
+    glShaderSource(fragment_shader, 1, &fragment, nullptr);
     glCompileShader(fragment_shader);
 
     unsigned shader_program { glCreateProgram() };
