@@ -15,7 +15,7 @@
 #include "glsl/sand.hpp"
 
 // Reads vertex & fragment shaders, builds shader program, then returns its ID.
-auto buildShaderProgram(const char *const vertex, const char *const fragment)
+auto buildShaderProgram(const char* const vertex, const char* const fragment)
     -> unsigned
 {
     unsigned vertex_shader { glCreateShader(GL_VERTEX_SHADER) };
@@ -41,16 +41,14 @@ auto buildShaderProgram(const char *const vertex, const char *const fragment)
 // Initializes and binds VBO, VAO, and EBO for a square sprite.
 void createSquareSpriteBuffers()
 {
-    constexpr std::size_t vertices_count { 12 };
-    constexpr std::array<float, vertices_count> square_vertices {
+    constexpr std::array square_vertices {
         0.0f, -1.0f, 0.0f, // Top-left
         1.0f, -1.0f, 0.0f, // Top-right
         1.0f, 0.0f,  0.0f, // Bottom-right
         0.0f, 0.0f,  0.0f  // Bottom-left
     };
 
-    constexpr std::size_t indices_count { 6 };
-    constexpr std::array<unsigned, indices_count> square_indices {
+    constexpr std::array square_indices {
         0, 1, 2, // First triangle
         0, 2, 3  // Second triangle
     };
@@ -86,7 +84,7 @@ void createSquareSpriteBuffers()
         GL_FLOAT,
         GL_FALSE,
         stride,
-        (void *)nullptr);
+        (void*)nullptr);
 
     glEnableVertexAttribArray(0);
 }
@@ -104,14 +102,14 @@ struct Settings
     std::span<bool, INPUT_KEYS_COUNT> input_processed;
 };
 
-void keyCallback(GLFWwindow *window, int key, int, int action, int)
+void keyCallback(GLFWwindow* window, int key, int, int action, int)
 {
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
     {
         glfwSetWindowShouldClose(window, true);
     }
 
-    Settings *settings { static_cast<Settings *>(
+    Settings* settings { static_cast<Settings*>(
         glfwGetWindowUserPointer(window)) };
 
     if (action == GLFW_PRESS)
@@ -125,9 +123,9 @@ void keyCallback(GLFWwindow *window, int key, int, int action, int)
     }
 }
 
-void mouseCallback(GLFWwindow *window, int button, int action, int)
+void mouseCallback(GLFWwindow* window, int button, int action, int)
 {
-    Settings *settings { static_cast<Settings *>(
+    Settings* settings { static_cast<Settings*>(
         glfwGetWindowUserPointer(window)) };
 
     if (action == GLFW_PRESS)
@@ -141,9 +139,9 @@ void mouseCallback(GLFWwindow *window, int button, int action, int)
     }
 }
 
-void framebufferSizeCallback(GLFWwindow *window, int width, int height)
+void framebufferSizeCallback(GLFWwindow* window, int width, int height)
 {
-    Settings *settings { static_cast<Settings *>(
+    Settings* settings { static_cast<Settings*>(
         glfwGetWindowUserPointer(window)) };
 
     settings->width  = static_cast<float>(width);
@@ -153,7 +151,7 @@ void framebufferSizeCallback(GLFWwindow *window, int width, int height)
 }
 
 // Initializes GLFW, creates and returns a pointer to the GLFW window.
-auto initializeGlfw(Settings &settings, const char *title) -> GLFWwindow *
+auto initializeGlfw(Settings& settings, const char* title) -> GLFWwindow*
 {
     if (!glfwInit())
     {
@@ -168,7 +166,7 @@ auto initializeGlfw(Settings &settings, const char *title) -> GLFWwindow *
     // Enables GLFW debug context if DEBUG_BUILD is set.
     DEBUG_OPENGL_CONTEXT();
 
-    GLFWwindow *window { glfwCreateWindow(
+    GLFWwindow* window { glfwCreateWindow(
         static_cast<int>(settings.width),
         static_cast<int>(settings.height),
         title,
@@ -221,16 +219,16 @@ void initializeGlad()
     }
 }
 
-// Loads shaders and creates OpenGL vertex buffers.
-void initializeData(Settings *const settings)
+// Loads shaders and creates OpenGL buffers.
+void initializeData(Settings* const settings)
 {
     createSquareSpriteBuffers();
 
     settings->shaders["sand"] = buildShaderProgram(sand_vert, sand_frag);
 }
 
-// Draws a square sprite at specified position.
-void drawSprite(Settings &settings, const char *sprite, float x, float y)
+// Draws a square sprite at the specified position.
+void drawSprite(Settings& settings, const char* sprite, float x, float y)
 {
     constexpr float scale_factor { 2.0f };
     constexpr float offset { 1.0f };
@@ -256,15 +254,21 @@ void drawSprite(Settings &settings, const char *sprite, float x, float y)
     glDrawElements(GL_TRIANGLES, indices_count, GL_UNSIGNED_INT, nullptr);
 }
 
-void handleInput(Settings &settings) {}
+void handleInput(Settings& settings) {}
 
-void updateAndRender(Settings &settings)
+void updateAndRender(Settings& settings)
 {
     handleInput(settings);
 
     drawSprite(settings, "sand", 0, 0);
     drawSprite(settings, "sand", settings.sprite_width, settings.sprite_width);
 }
+
+struct Particle
+{
+    const char* name;
+    int velocity;
+};
 
 // TODO: Input with mouse & keyboard.
 auto main() -> int
@@ -281,17 +285,17 @@ auto main() -> int
     std::array<bool, INPUT_KEYS_COUNT> input_processed {};
 
     Settings settings {
-        .width        = screen_width,
-        .height       = screen_height,
-        .sprite_width = sprite_width,
-        .columns = static_cast<int>(settings.width / settings.sprite_width),
-        .rows    = static_cast<int>(settings.height / settings.sprite_width),
+        .width { screen_width },
+        .height { screen_height },
+        .sprite_width { sprite_width },
+        .columns { static_cast<int>(settings.width / settings.sprite_width) },
+        .rows { static_cast<int>(settings.height / settings.sprite_width) },
         .shaders {},
         .input { input },
         .input_processed { input_processed }
     };
 
-    GLFWwindow *window { initializeGlfw(settings, "Falling sand") };
+    GLFWwindow* window { initializeGlfw(settings, "Falling sand") };
 
     initializeGlad();
 
